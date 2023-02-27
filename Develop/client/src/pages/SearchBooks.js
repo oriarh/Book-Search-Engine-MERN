@@ -11,7 +11,7 @@ import { useMutation } from '@apollo/client';
 import { SAVE_BOOK } from '../utils/mutations'
 
 import Auth from '../utils/auth';
-import { saveBook, searchGoogleBooks } from '../utils/API';
+import { searchGoogleBooks } from '../utils/API';
 import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
 
 const SearchBooks = () => {
@@ -66,7 +66,7 @@ const SearchBooks = () => {
   const handleSaveBook = async (bookId) => {
 
     // find the book in `searchedBooks` state by the matching id
-    const bookToSave = searchedBooks.find((book) => book.bookId === bookId);
+    //const bookToSave = searchedBooks.find((book) => book.bookId === bookId);
 
     // get token
     const token = Auth.loggedIn() ? Auth.getToken() : null;
@@ -79,12 +79,12 @@ const SearchBooks = () => {
       //const response = await saveBook(bookToSave, token);
       const { data } = saveBookMutation ({
         variables: {
-          bookId: data.bookId,
-          authors: data.authors,
-          description: data.description,
-          title: data.title,
-          image: data.image,
-          link: data.link  
+          bookId,
+          // authors,
+          // description,
+          // title,
+          // image,
+          // link  
         }
       }) 
 
@@ -105,7 +105,7 @@ const SearchBooks = () => {
         <Container>
           <h1>Search for Books!</h1>
           <Form onSubmit={handleFormSubmit}>
-            <Form.Row>
+            <Row>
               <Col xs={12} md={8}>
                 <Form.Control
                   name='searchInput'
@@ -121,7 +121,7 @@ const SearchBooks = () => {
                   Submit Search
                 </Button>
               </Col>
-            </Form.Row>
+            </Row>
           </Form>
         </Container>
       </div>
