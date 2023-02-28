@@ -7,7 +7,7 @@ The app was built using the MERN stack, with a React front end, MongoDB database
 
 
 ## Screenshot
-!["Image Screenshot"](./public/images/Screenshot)
+!["Image Screenshot"](./public/images/appScreenshot)
 
 ## Installation
 N/A
