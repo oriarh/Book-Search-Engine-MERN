@@ -4,14 +4,16 @@ const { signToken } = require('../utils/auth');
 
 const resolvers = {
     Query: {
-        me: async () => {
-            const user = await User.find()
-            return user
-        }
+        me: async (parent, args, context) => {
+            if (context.user) {
+              return User.findOne({ _id: context.user._id }).populate('thoughts');
+            }
+            throw new AuthenticationError('You need to be logged in!');
+          },
     },
 
     Mutation: {
-        login: async (parent, { email, password }) => {
+        login: async (parent, { email, password }, context) => {
             const user = await User.findOne({ email });
       
             if (!user) {
@@ -32,35 +34,37 @@ const resolvers = {
         addUser: async (parent, { username, email, password }) => {
             const user = await User.create({username, email, password});
             const token = signToken(user);
-            return ( token, user );
+            return { token, user };
 
         },
 
-        saveBook: async (parent, { bookId, authors, description, title, image, link }) => {
+        saveBook: async (parent, { bookId, authors, description, title, image, link }, context) => {
            return await User.findOneAndUpdate(
-                {bookId: bookId },
+                {_id: context.user._id },
                 {
                     $addToSet: { savedBooks: { 
-                        bookId: bookId,
-                        authors: authors,
-                        description: description,
-                        title: title,
-                        image: image,
-                        link: link 
+                        bookId,
+                        authors,
+                        description,
+                        title,
+                        image,
+                        link 
                     }},
                 },
                 { new: true },
             )
         },
 
-        removeBook: async (parent, { bookId }) => {
+        removeBook: async (parent, { bookId }, context) => {
             return await User.findOneAndUpdate(
-            { bookId: bookId},
+            { _id: context.user._id },
             {
-                $pull: { bookId: bookId },
+                $pull: { savedBooks: { bookId: bookId } },
             },
             { new: true },
             )    
         }
     }
 }
+
+module.exports = resolvers;

@@ -16,7 +16,7 @@ import { REMOVE_BOOK } from '../utils/mutations';
 const SavedBooks = () => {
   const [userData, setUserData] = useState({});
   const { loading, data } = useQuery(GET_ME);
-  const [ removeBookMutation, {loadingMutation, dataMutation, error} ] = useMutation (REMOVE_BOOK)
+  const [ removeBook, { error, dataMutation } ] = useMutation (REMOVE_BOOK)
 
   const getUserData = async () => {
     try {
@@ -26,13 +26,14 @@ const SavedBooks = () => {
         return false;
       }
 
-      const response = await data.user;
+      const response = await data;
 
       if (!response) {
         throw new Error('something went wrong!');
       }
 
-      const user = await response.json();
+      const user = await response.me;
+
       setUserData(user);
     } catch (err) {
       console.error(err);
@@ -54,7 +55,7 @@ const SavedBooks = () => {
 
     try {
       //const response = await deleteBook(bookId, token);
-      const { dataMutation } = removeBookMutation ({
+      const { dataMutation } = removeBook ({
         variables: { bookId }
       }) 
 
