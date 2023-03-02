@@ -7,7 +7,7 @@ The app was built using the MERN stack, with a React front end, MongoDB database
 https://kitaabsearchengine.herokuapp.com/
 
 ## Screenshot
-!["Image Screenshot"](./Develop/client/public/appScreenshot.png)
+!["Image Screenshot"](./client/public/appScreenshot.png)
 
 ## Installation
 N/A
